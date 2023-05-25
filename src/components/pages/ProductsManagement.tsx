@@ -1,19 +1,30 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import React from "react";
+import ProductDetailsForm from "../formik/ProductDetailsForm";
 
 const ProductManagement = () => {
   return (
     <>
-      <center>
-        <Box
-          width={10 / 12}
-          textAlign={"justify"}
-          justifyContent={"center"}
-          display={"flex"}
-        >
-          <h1>Product Management page</h1>
-        </Box>
-      </center>
+      <Box
+        marginX={5}
+        marginBottom={5}
+        justifyContent={"center"}
+        display={"flex"}
+        fontWeight={500}
+        color={"teal.400"}
+        fontSize="3xl"
+      >
+        <Text>Add Products</Text>
+      </Box>
+      <Box
+        marginX={5}
+        justifyContent={"center"}
+        display={"flex"}
+        fontWeight={500}
+        color={"gray.500"}
+      >
+        <ProductDetailsForm />
+      </Box>
     </>
   );
 };
