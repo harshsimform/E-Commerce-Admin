@@ -1,33 +1,58 @@
-import Root from "./components/pages/Root";
-import Home from "./components/pages/Home";
-import PageNotFound from "./components/pages/PageNotFound";
-import ProductManagement from "./components/pages/ProductsManagement";
-import OrderManagement from "./components/pages/OrderManagement";
-import UserManagement from "./components/pages/UserManagement";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { lazy, Suspense } from "react";
+const LazyHome = lazy(() => import("./components/pages/Home"));
+const LazyRoot = lazy(() => import("./components/pages/Root"));
+const LazyProductManagement = lazy(
+  () => import("./components/pages/ProductsManagement")
+);
+const LazyOrderManagement = lazy(
+  () => import("./components/pages/OrderManagement")
+);
+const LazyUserManagement = lazy(
+  () => import("./components/pages/UserManagement")
+);
+const LazyPageNotFound = lazy(() => import("./components/pages/PageNotFound"));
+
 import "./App.css";
+import SuspenseLoading from "./components/pages/SuspenseLoading";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root />,
-    errorElement: <PageNotFound />,
+    element: <LazyRoot />,
+    errorElement: <LazyPageNotFound />,
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: (
+          <Suspense fallback={<SuspenseLoading />}>
+            <LazyHome />
+          </Suspense>
+        ),
       },
       {
         path: "/product-management",
-        element: <ProductManagement />,
+        element: (
+          <Suspense fallback={<SuspenseLoading />}>
+            <LazyProductManagement />
+          </Suspense>
+        ),
       },
       {
         path: "/order-management",
-        element: <OrderManagement />,
+        element: (
+          <Suspense fallback={<SuspenseLoading />}>
+            <LazyOrderManagement />
+          </Suspense>
+        ),
       },
       {
         path: "/user-management",
-        element: <UserManagement />,
+        element: (
+          <Suspense fallback={<SuspenseLoading />}>
+            <LazyUserManagement />
+          </Suspense>
+        ),
       },
     ],
   },

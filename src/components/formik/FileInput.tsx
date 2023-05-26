@@ -32,12 +32,14 @@ const FileInput = ({ label, name }: Props) => {
 
   return (
     <>
-      <FormLabel htmlFor={name}>{label}</FormLabel>
-      <Box marginY={2}>
+      <FormLabel htmlFor={name} color="teal.500">
+        {label}
+      </FormLabel>
+      <Box>
         <input id={name} type="file" onChange={handleFileChange} />
       </Box>
       {selectedImg && (
-        <Box marginY={5}>
+        <Box marginY={5} boxSize="15rem" height="full">
           <img src={selectedImg} alt="Preview" />
         </Box>
       )}

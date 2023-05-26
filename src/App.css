@@ -1,7 +1,7 @@
 .darkModeBtn {
   position: fixed;
-  bottom: 2rem;
-  right: 2rem;
+  top: 1.5rem;
+  right: 1.2rem;
 }
 
 /* input[type="file"] {

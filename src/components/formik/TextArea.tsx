@@ -8,7 +8,7 @@ const TextArea = (props: Props) => {
   const { label, name, ...rest } = props;
   return (
     <Box>
-      <FormLabel htmlFor={name} marginTop={2}>
+      <FormLabel htmlFor={name} color="teal.500">
         {label}
       </FormLabel>
       <Field as={Textarea} id={name} name={name} {...rest} />

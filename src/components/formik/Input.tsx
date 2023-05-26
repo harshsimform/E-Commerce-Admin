@@ -1,4 +1,4 @@
-import { Input as ChakraInput, FormLabel } from "@chakra-ui/react";
+import { Input as ChakraInput, FormLabel, Box } from "@chakra-ui/react";
 import { ErrorMessage } from "formik";
 import TextError from "./TextError";
 import { Props } from "../../interface/interface";
@@ -7,8 +7,10 @@ import { Field } from "formik";
 const Input = (props: Props) => {
   const { label, name, ...rest } = props;
   return (
-    <div className="formControl">
-      <FormLabel htmlFor={name}>{label}</FormLabel>
+    <Box marginY={2}>
+      <FormLabel htmlFor={name} color="teal.500">
+        {label}
+      </FormLabel>
       <Field
         as={ChakraInput}
         id={name}
@@ -17,7 +19,7 @@ const Input = (props: Props) => {
         color={"gray.600"}
       />
       <ErrorMessage name={name} component={TextError} />
-    </div>
+    </Box>
   );
 };
 

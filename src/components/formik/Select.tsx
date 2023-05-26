@@ -7,7 +7,7 @@ const Select = (props: Props) => {
   const { label, name, options, ...rest } = props;
   return (
     <Box>
-      <FormLabel htmlFor={name} marginTop={2}>
+      <FormLabel htmlFor={name} marginTop={2} color="teal.500">
         {label}
       </FormLabel>
       <Field as={ChakraSelect} id={name} name={name} {...rest}>

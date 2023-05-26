@@ -6,6 +6,8 @@ export interface IOption {
 export interface IFormValues {
   image?: string | undefined;
   name: string;
+  discountedPrice: string;
+  originalPrice: string;
   description: string;
   selectGender: string;
   selectCategory: string;
@@ -13,6 +15,7 @@ export interface IFormValues {
 }
 
 export interface Props {
+  key?: number;
   control?: string;
   label?: string;
   name: string;
@@ -31,6 +34,4 @@ export enum InputControlType {
   Input = "input",
   TextArea = "textarea",
   Select = "select",
-  Radio = "radio",
-  Checkbox = "checkbox",
 }

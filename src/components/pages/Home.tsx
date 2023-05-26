@@ -10,6 +10,9 @@ const Home = () => {
           textAlign={"justify"}
           justifyContent={"center"}
           display={"flex"}
+          fontWeight={500}
+          color={"teal.400"}
+          fontSize="3xl"
         >
           <h1>Home page</h1>
         </Box>

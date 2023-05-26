@@ -10,6 +10,9 @@ const OrderManagement = () => {
           textAlign={"justify"}
           justifyContent={"center"}
           display={"flex"}
+          fontWeight={500}
+          color={"teal.400"}
+          fontSize="3xl"
         >
           <h1>Order Management page</h1>
         </Box>

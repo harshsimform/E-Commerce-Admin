@@ -10,6 +10,9 @@ const UserManagement = () => {
           textAlign={"justify"}
           justifyContent={"center"}
           display={"flex"}
+          fontWeight={500}
+          color={"teal.400"}
+          fontSize="3xl"
         >
           <h1>User Management Page</h1>
         </Box>

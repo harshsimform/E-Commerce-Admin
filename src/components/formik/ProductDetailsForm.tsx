@@ -2,11 +2,18 @@ import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import FormikControl from "./FormikControl";
 import { IFormValues, IOption } from "../../interface/interface";
-import { Box, Button, useColorModeValue } from "@chakra-ui/react";
+import { Box, Button, useToast } from "@chakra-ui/react";
 import FileInput from "./FileInput";
+import { useState } from "react";
 
 const ProductDetailsForm = () => {
-  const customBorderColor = useColorModeValue("white.200", "gray.700");
+  const toast = useToast();
+  const [resetKey, setResetKey] = useState(0);
+
+  const handleReset = () => {
+    setResetKey((prevKey) => prevKey + 1);
+  };
+
   const productGender: IOption[] = [
     { key: "Select gender", value: "" },
     { key: "Male", value: "male" },
@@ -39,6 +46,8 @@ const ProductDetailsForm = () => {
   const initialValue: IFormValues = {
     image: "",
     name: "",
+    originalPrice: "",
+    discountedPrice: "",
     description: "",
     selectGender: "",
     selectCategory: "",
@@ -59,18 +68,36 @@ const ProductDetailsForm = () => {
         return false;
       })
       .required("Image is required"),
-    name: Yup.string().required("Required"),
-    description: Yup.string().required("Required"),
+    name: Yup.string().trim().required("Required"),
+    description: Yup.string()
+      .trim()
+      .required("Required")
+      .min(30, "Description at least be 30 characters long"),
     selectGender: Yup.string().required("Required"),
     selectCategory: Yup.string().required("Required"),
     selectSubCategory: Yup.string().required("Required"),
+    discountedPrice: Yup.string().required("Required"),
+    originalPrice: Yup.number()
+      .required("Required")
+      .moreThan(
+        Yup.ref("discountedPrice"),
+        "Original price must be greater than discounted price"
+      ),
   });
   const onSubmit = (
     values: IFormValues,
     onSubmitProps: FormikHelpers<IFormValues>
   ) => {
-    console.log("Form data", values);
     onSubmitProps.resetForm();
+    setResetKey((prevKey) => prevKey + 1);
+    console.log(values);
+
+    toast({
+      title: "New product has been added successfully",
+      position: "top",
+      status: "success",
+      isClosable: true,
+    });
   };
 
   return (
@@ -84,13 +111,12 @@ const ProductDetailsForm = () => {
           width={"3xl"}
           boxShadow="lg"
           padding={6}
+          borderWidth="1px"
           borderRadius="lg"
-          border={1}
-          borderStyle="solid"
-          borderColor={customBorderColor}
+          marginBottom="5rem"
         >
           <Form>
-            <FileInput label="Product Image" name="image" />
+            <FileInput label="Product Image" name="image" key={resetKey} />
             <FormikControl
               control="input"
               type="text"
@@ -99,43 +125,60 @@ const ProductDetailsForm = () => {
               placeholder="Please enter product name"
             />
             <FormikControl
+              control="input"
+              type="number"
+              label="Product Price"
+              name="discountedPrice"
+              placeholder="Please enter product discounted price"
+            />
+            <FormikControl
+              control="input"
+              type="number"
+              label="Product Original Price"
+              name="originalPrice"
+              placeholder="Please enter product actual price"
+            />
+            <FormikControl
               control="textarea"
-              label="Description"
+              label="Product Description"
               name="description"
               placeholder="Please enter product description"
             />
             <FormikControl
               control="select"
-              label={"select Gender"}
+              label="Select Gender"
               name="selectGender"
               options={productGender}
             />
             <FormikControl
               control="select"
-              label={"select Category"}
+              label={"Select Category"}
               name="selectCategory"
               options={productCategory}
             />
             <FormikControl
               control="select"
-              label={"select Sub Category"}
+              label="Select Sub Category"
               name="selectSubCategory"
               options={productSubCategory}
             />
             <Button
               type="submit"
-              colorScheme={"teal"}
-              bgColor={"teal.400"}
+              colorScheme="teal"
+              color="white"
+              bgColor="teal.400"
               marginY={4}
             >
               Submit
             </Button>
             <Button
               type="reset"
-              colorScheme={"teal"}
-              bgColor={"teal.400"}
+              colorScheme="teal"
+              color="white"
+              bgColor="teal.400"
               marginY={4}
               marginX={2}
+              onClick={handleReset}
             >
               Reset
             </Button>

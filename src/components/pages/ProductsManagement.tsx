@@ -6,7 +6,6 @@ const ProductManagement = () => {
   return (
     <>
       <Box
-        marginX={5}
         marginBottom={5}
         justifyContent={"center"}
         display={"flex"}
@@ -19,6 +18,7 @@ const ProductManagement = () => {
       <Box
         marginX={5}
         justifyContent={"center"}
+        alignItems="center"
         display={"flex"}
         fontWeight={500}
         color={"gray.500"}
