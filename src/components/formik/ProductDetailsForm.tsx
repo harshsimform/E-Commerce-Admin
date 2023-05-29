@@ -5,6 +5,7 @@ import { IFormValues, IOption } from "../../interface/interface";
 import { Box, Button, useToast } from "@chakra-ui/react";
 import FileInput from "./FileInput";
 import { useState } from "react";
+import API from "../../api";
 
 const ProductDetailsForm = () => {
   const toast = useToast();
@@ -19,15 +20,8 @@ const ProductDetailsForm = () => {
     { key: "Male", value: "male" },
     { key: "Female", value: "female" },
   ];
-  const productCategory: IOption[] = [
-    { key: "Select category", value: "" },
-    { key: "Men", value: "men" },
-    { key: "Women", value: "women" },
-    { key: "Electronics", value: "electronics" },
-    { key: "Beauty", value: "beauty" },
-  ];
 
-  const productSubCategory: IOption[] = [
+  const productCategory: IOption[] = [
     { key: "Select category", value: "" },
     { key: "Topwear", value: "topwear" },
     { key: "Bottomwear", value: "bottomwear" },
@@ -41,6 +35,8 @@ const ProductDetailsForm = () => {
     { key: "Fragrances", value: "fragrances" },
     { key: "Appliances", value: "appliances" },
     { key: "Home & Living", value: "home and living" },
+    { key: "Electronics", value: "electronics" },
+    { key: "Beauty", value: "beauty" },
   ];
 
   const initialValue: IFormValues = {
@@ -49,34 +45,29 @@ const ProductDetailsForm = () => {
     originalPrice: "",
     discountedPrice: "",
     description: "",
-    selectGender: "",
-    selectCategory: "",
-    selectSubCategory: "",
+    quantity: "",
+    gender: "",
+    category: "",
   };
   const validationSchema = Yup.object({
-    image: Yup.string()
-      .matches(/data:image\/(png|jpg|);base64?/i, "Image must be jpg or png")
-      .test("fileSize", "Image size must be less than 2MB", function (value) {
-        if (!value) {
-          return true;
-        }
-        const fileInput = document.getElementById("image") as HTMLInputElement;
-        const file = fileInput.files && fileInput.files[0];
-        if (file && file.size) {
-          return file.size <= 2 * 1024 * 1024;
-        }
-        return false;
-      })
-      .required("Image is required"),
+    image: Yup.string().required("Image is required"),
     name: Yup.string().trim().required("Required"),
     description: Yup.string()
       .trim()
       .required("Required")
       .min(30, "Description at least be 30 characters long"),
-    selectGender: Yup.string().required("Required"),
-    selectCategory: Yup.string().required("Required"),
-    selectSubCategory: Yup.string().required("Required"),
-    discountedPrice: Yup.string().required("Required"),
+    gender: Yup.string().required("Required"),
+    category: Yup.string().required("Required"),
+    quantity: Yup.string()
+      .required("Required")
+      .test("is-positive", "Quantity must be greater than 0", (value) => {
+        return parseInt(value) > 0;
+      }),
+    discountedPrice: Yup.string()
+      .required("Required")
+      .test("is-positive", "Price must be greater than 0", (value) => {
+        return parseInt(value) > 0;
+      }),
     originalPrice: Yup.number()
       .required("Required")
       .moreThan(
@@ -84,20 +75,32 @@ const ProductDetailsForm = () => {
         "Original price must be greater than discounted price"
       ),
   });
-  const onSubmit = (
+  const onSubmit = async (
     values: IFormValues,
     onSubmitProps: FormikHelpers<IFormValues>
   ) => {
     onSubmitProps.resetForm();
     setResetKey((prevKey) => prevKey + 1);
-    console.log(values);
 
-    toast({
-      title: "New product has been added successfully",
-      position: "top",
-      status: "success",
-      isClosable: true,
-    });
+    API.post("/product", values)
+      .then((res) => {
+        // Handle successful response
+        toast({
+          title: "New product has been added successfully",
+          position: "top",
+          status: "success",
+          isClosable: true,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        toast({
+          title: "Error occurred while adding the product",
+          position: "top",
+          status: "error",
+          isClosable: true,
+        });
+      });
   };
 
   return (
@@ -127,7 +130,7 @@ const ProductDetailsForm = () => {
             <FormikControl
               control="input"
               type="number"
-              label="Product Price"
+              label="Product Discounted Price"
               name="discountedPrice"
               placeholder="Please enter product discounted price"
             />
@@ -145,22 +148,23 @@ const ProductDetailsForm = () => {
               placeholder="Please enter product description"
             />
             <FormikControl
+              control="input"
+              type="number"
+              label="Available Quantity"
+              name="quantity"
+              placeholder="Please enter available product quantity"
+            />
+            <FormikControl
               control="select"
               label="Select Gender"
-              name="selectGender"
+              name="gender"
               options={productGender}
             />
             <FormikControl
               control="select"
-              label={"Select Category"}
-              name="selectCategory"
+              label="Select Category"
+              name="category"
               options={productCategory}
-            />
-            <FormikControl
-              control="select"
-              label="Select Sub Category"
-              name="selectSubCategory"
-              options={productSubCategory}
             />
             <Button
               type="submit"

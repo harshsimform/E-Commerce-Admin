@@ -14,7 +14,7 @@ const Home = () => {
           color={"teal.400"}
           fontSize="3xl"
         >
-          <h1>Home page</h1>
+          <h1>Summary</h1>
         </Box>
       </center>
     </>

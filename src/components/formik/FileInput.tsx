@@ -16,11 +16,30 @@ const FileInput = ({ label, name }: Props) => {
     if (file) {
       const reader = new FileReader();
 
-      reader.onload = () => {
+      reader.onload = async () => {
         if (reader.readyState === 2) {
           const base64 = reader.result as string;
           setSelectedImg(base64);
           helpers.setValue(base64);
+
+          // Upload image to Cloudinary
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("upload_preset", "snkihizd");
+          const response = await fetch(
+            "https://api.cloudinary.com/v1_1/dcstijhci/image/upload",
+            {
+              method: "POST",
+              body: formData,
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("Error uploading image");
+          }
+
+          const data = await response.json();
+          helpers.setValue(data.secure_url);
         }
       };
 
