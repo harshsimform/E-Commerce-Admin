@@ -14,6 +14,14 @@ export interface IFormValues {
   category: string;
 }
 
+export interface UserAuthFormValues {
+  name?: string;
+  email: string;
+  phone?: string;
+  password: string;
+  confirmPassword?: string;
+}
+
 export interface Props {
   key?: number;
   control?: string;

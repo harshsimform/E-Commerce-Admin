@@ -133,7 +133,7 @@ const DrawerMenu = () => {
             </DrawerBody>
             <DrawerFooter>
               <Box>
-                <NavLink to="/login">
+                <NavLink to="/login" onClick={onClose}>
                   <Button mr={4} colorScheme="teal" variant="outline">
                     Log in
                   </Button>

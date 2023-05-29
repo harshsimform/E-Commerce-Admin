@@ -11,6 +11,11 @@ const LazyOrderManagement = lazy(
 const LazyUserManagement = lazy(
   () => import("./components/pages/UserManagement")
 );
+
+const LazySignup = lazy(
+  () => import("./components/pages/authentication/Signup")
+);
+const LazyLogin = lazy(() => import("./components/pages/authentication/Login"));
 const LazyPageNotFound = lazy(() => import("./components/pages/PageNotFound"));
 
 import "./App.css";
@@ -51,6 +56,22 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={<SuspenseLoading />}>
             <LazyUserManagement />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/signup",
+        element: (
+          <Suspense fallback={<SuspenseLoading />}>
+            <LazySignup />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/login",
+        element: (
+          <Suspense fallback={<SuspenseLoading />}>
+            <LazyLogin />
           </Suspense>
         ),
       },
