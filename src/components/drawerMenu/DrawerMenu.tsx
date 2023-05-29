@@ -50,74 +50,82 @@ const DrawerMenu = () => {
               <Menu>
                 <Box>
                   <MenuGroup>
-                    <NavLink to="/">
-                      <Flex>
-                        <IconButton
-                          variant="ghost"
-                          colorScheme="teal"
-                          aria-label="summary"
-                          icon={<AiOutlineDashboard />}
-                          _hover={{ bgColor: "none" }}
-                        />
+                    <Flex alignItems="center">
+                      <IconButton
+                        variant="ghost"
+                        colorScheme="teal"
+                        aria-label="summary"
+                        icon={<AiOutlineDashboard />}
+                        _hover={{ bgColor: "none" }}
+                      />
+                      <NavLink to="/">
                         <MenuItem
                           onClick={onClose}
                           _hover={{ color: "teal.400" }}
                         >
-                          <Text ml="-3">Summary</Text>
+                          <Text ml="-3" mt="0.5">
+                            Summary
+                          </Text>
                         </MenuItem>
-                      </Flex>
-                    </NavLink>
-                    <NavLink to="/product-management">
-                      <Flex>
-                        <IconButton
-                          variant="ghost"
-                          colorScheme="teal"
-                          aria-label="summary"
-                          icon={<BsShopWindow />}
-                          _hover={{ bgColor: "none" }}
-                        />
+                      </NavLink>
+                    </Flex>
+                    <Flex>
+                      <IconButton
+                        variant="ghost"
+                        colorScheme="teal"
+                        aria-label="summary"
+                        icon={<BsShopWindow />}
+                        _hover={{ bgColor: "none" }}
+                      />
+                      <NavLink to="/product-management">
                         <MenuItem
                           onClick={onClose}
                           _hover={{ color: "teal.400" }}
                         >
-                          <Text ml="-3">Product Management</Text>
+                          <Text ml="-3" mt="0.2rem">
+                            Product Management
+                          </Text>
                         </MenuItem>
-                      </Flex>
-                    </NavLink>
-                    <NavLink to="/order-management">
-                      <Flex>
-                        <IconButton
-                          variant="ghost"
-                          colorScheme="teal"
-                          aria-label="summary"
-                          icon={<RiCalendarTodoLine />}
-                          _hover={{ bgColor: "none" }}
-                        />
+                      </NavLink>
+                    </Flex>
+                    <Flex>
+                      <IconButton
+                        variant="ghost"
+                        colorScheme="teal"
+                        aria-label="summary"
+                        icon={<RiCalendarTodoLine />}
+                        _hover={{ bgColor: "none" }}
+                      />
+                      <NavLink to="/order-management">
                         <MenuItem
                           onClick={onClose}
                           _hover={{ color: "teal.400" }}
                         >
-                          <Text ml="-3">Order Management</Text>
+                          <Text ml="-3" mt="0.5">
+                            Order Management
+                          </Text>
                         </MenuItem>
-                      </Flex>
-                    </NavLink>
-                    <NavLink to="/user-management">
-                      <Flex>
-                        <IconButton
-                          variant="ghost"
-                          colorScheme="teal"
-                          aria-label="summary"
-                          icon={<FaUsers />}
-                          _hover={{ bgColor: "none" }}
-                        />
+                      </NavLink>
+                    </Flex>
+                    <Flex>
+                      <IconButton
+                        variant="ghost"
+                        colorScheme="teal"
+                        aria-label="summary"
+                        icon={<FaUsers />}
+                        _hover={{ bgColor: "none" }}
+                      />
+                      <NavLink to="/user-management">
                         <MenuItem
                           onClick={onClose}
                           _hover={{ color: "teal.400" }}
                         >
-                          <Text ml="-3">User Management</Text>
+                          <Text ml="-3" mt="0.5">
+                            User Management
+                          </Text>
                         </MenuItem>
-                      </Flex>
-                    </NavLink>
+                      </NavLink>
+                    </Flex>
                   </MenuGroup>
                   <MenuDivider />
                 </Box>
@@ -125,13 +133,16 @@ const DrawerMenu = () => {
             </DrawerBody>
             <DrawerFooter>
               <Box>
-                <Button mr={4} colorScheme="teal" variant="outline">
-                  Log in
-                </Button>
-
-                <Button colorScheme="teal" variant="outline">
-                  Sign in
-                </Button>
+                <NavLink to="/login">
+                  <Button mr={4} colorScheme="teal" variant="outline">
+                    Log in
+                  </Button>
+                </NavLink>
+                <NavLink to="/signup" onClick={onClose}>
+                  <Button colorScheme="teal" variant="outline">
+                    Sign in
+                  </Button>
+                </NavLink>
               </Box>
             </DrawerFooter>
           </DrawerContent>
