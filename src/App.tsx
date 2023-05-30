@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { lazy, Suspense } from "react";
 const LazyHome = lazy(() => import("./components/pages/Home"));
 const LazyRoot = lazy(() => import("./components/pages/Root"));
+const LazyAddProduct = lazy(() => import("./components/pages/AddProduct"));
 const LazyProductManagement = lazy(
   () => import("./components/pages/ProductsManagement")
 );
@@ -17,6 +18,7 @@ const LazySignup = lazy(
 );
 const LazyLogin = lazy(() => import("./components/pages/authentication/Login"));
 const LazyPageNotFound = lazy(() => import("./components/pages/PageNotFound"));
+import ColorMode from "./components/colorMode/ColorMode";
 
 import "./App.css";
 import SuspenseLoading from "./components/pages/SuspenseLoading";
@@ -32,6 +34,14 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={<SuspenseLoading />}>
             <LazyHome />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/add-product",
+        element: (
+          <Suspense fallback={<SuspenseLoading />}>
+            <LazyAddProduct />
           </Suspense>
         ),
       },
@@ -83,6 +93,7 @@ function App() {
   return (
     <>
       <RouterProvider router={router} />
+      <ColorMode />
     </>
   );
 }

@@ -7,7 +7,7 @@ const UserManagement = () => {
       <center>
         <Box
           width={10 / 12}
-          textAlign={"justify"}
+          textAlign={"center"}
           justifyContent={"center"}
           display={"flex"}
           fontWeight={500}

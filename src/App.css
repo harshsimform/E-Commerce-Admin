@@ -3,3 +3,7 @@
   top: 1.5rem;
   right: 1.2rem;
 }
+
+.ag-header-cell-label {
+  justify-content: center;
+}

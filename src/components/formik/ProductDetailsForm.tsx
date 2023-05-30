@@ -1,11 +1,11 @@
 import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import FormikControl from "./FormikControl";
-import { IFormValues, IOption } from "../../interface/interface";
+import { ProductFormValues, IOption } from "../../interface/interface";
 import { Box, Button, useToast } from "@chakra-ui/react";
 import FileInput from "./FileInput";
 import { useState } from "react";
-import API from "../../api";
+import API_BASE_URL from "../../api";
 
 const ProductDetailsForm = () => {
   const toast = useToast();
@@ -39,7 +39,8 @@ const ProductDetailsForm = () => {
     { key: "Beauty", value: "beauty" },
   ];
 
-  const initialValue: IFormValues = {
+  const initialValue: ProductFormValues = {
+    _id: "",
     image: "",
     name: "",
     originalPrice: "",
@@ -76,13 +77,13 @@ const ProductDetailsForm = () => {
       ),
   });
   const onSubmit = async (
-    values: IFormValues,
-    onSubmitProps: FormikHelpers<IFormValues>
+    values: ProductFormValues,
+    onSubmitProps: FormikHelpers<ProductFormValues>
   ) => {
     onSubmitProps.resetForm();
     setResetKey((prevKey) => prevKey + 1);
 
-    API.post("/product", values)
+    API_BASE_URL.post("/product", values)
       .then((res) => {
         // Handle successful response
         toast({

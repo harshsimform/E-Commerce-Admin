@@ -10,17 +10,18 @@ import {
   DrawerContent,
   DrawerCloseButton,
   Text,
-  IconButton,
   Flex,
+  Icon,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { Button } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { Menu, MenuItem, MenuGroup, MenuDivider } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
-import ColorMode from "../colorMode/ColorMode";
 import { useRef } from "react";
 import { AiOutlineDashboard } from "react-icons/ai";
+import { RiPlayListAddLine } from "react-icons/ri";
 import { BsShopWindow } from "react-icons/bs";
 import { RiCalendarTodoLine } from "react-icons/ri";
 import { FaUsers } from "react-icons/fa";
@@ -29,10 +30,18 @@ const DrawerMenu = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef<HTMLButtonElement>(null);
 
+  const menuBgColor = useColorModeValue("teal.400", "teal.500");
+
   return (
     <ChakraProvider>
       <Box p={6}>
-        <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
+        <Button
+          ref={btnRef}
+          colorScheme="teal"
+          bgColor={menuBgColor}
+          color="white"
+          onClick={onOpen}
+        >
           <RxHamburgerMenu />
         </Button>
 
@@ -50,82 +59,46 @@ const DrawerMenu = () => {
               <Menu>
                 <Box>
                   <MenuGroup>
-                    <Flex alignItems="center">
-                      <IconButton
-                        variant="ghost"
-                        colorScheme="teal"
-                        aria-label="summary"
-                        icon={<AiOutlineDashboard />}
-                        _hover={{ bgColor: "none" }}
-                      />
-                      <NavLink to="/">
-                        <MenuItem
-                          onClick={onClose}
-                          _hover={{ color: "teal.400" }}
-                        >
-                          <Text ml="-3" mt="0.5">
-                            Summary
-                          </Text>
+                    <NavLink to="/">
+                      <Flex alignItems="center" _hover={{ color: "teal.500" }}>
+                        <Icon as={AiOutlineDashboard} boxSize={4} />
+                        <MenuItem onClick={onClose}>
+                          <Text mt="0.5">Summary</Text>
                         </MenuItem>
-                      </NavLink>
-                    </Flex>
-                    <Flex>
-                      <IconButton
-                        variant="ghost"
-                        colorScheme="teal"
-                        aria-label="summary"
-                        icon={<BsShopWindow />}
-                        _hover={{ bgColor: "none" }}
-                      />
-                      <NavLink to="/product-management">
-                        <MenuItem
-                          onClick={onClose}
-                          _hover={{ color: "teal.400" }}
-                        >
-                          <Text ml="-3" mt="0.2rem">
-                            Product Management
-                          </Text>
+                      </Flex>
+                    </NavLink>
+                    <NavLink to="/add-product">
+                      <Flex alignItems="center" _hover={{ color: "teal.500" }}>
+                        <Icon as={RiPlayListAddLine} boxSize={4} />
+                        <MenuItem onClick={onClose}>
+                          <Text mt="0.5">Add Product</Text>
                         </MenuItem>
-                      </NavLink>
-                    </Flex>
-                    <Flex>
-                      <IconButton
-                        variant="ghost"
-                        colorScheme="teal"
-                        aria-label="summary"
-                        icon={<RiCalendarTodoLine />}
-                        _hover={{ bgColor: "none" }}
-                      />
-                      <NavLink to="/order-management">
-                        <MenuItem
-                          onClick={onClose}
-                          _hover={{ color: "teal.400" }}
-                        >
-                          <Text ml="-3" mt="0.5">
-                            Order Management
-                          </Text>
+                      </Flex>
+                    </NavLink>
+                    <NavLink to="/product-management">
+                      <Flex alignItems="center" _hover={{ color: "teal.500" }}>
+                        <Icon as={BsShopWindow} boxSize={4} />
+                        <MenuItem onClick={onClose}>
+                          <Text mt="0.5">Products Management</Text>
                         </MenuItem>
-                      </NavLink>
-                    </Flex>
-                    <Flex>
-                      <IconButton
-                        variant="ghost"
-                        colorScheme="teal"
-                        aria-label="summary"
-                        icon={<FaUsers />}
-                        _hover={{ bgColor: "none" }}
-                      />
-                      <NavLink to="/user-management">
-                        <MenuItem
-                          onClick={onClose}
-                          _hover={{ color: "teal.400" }}
-                        >
-                          <Text ml="-3" mt="0.5">
-                            User Management
-                          </Text>
+                      </Flex>
+                    </NavLink>
+                    <NavLink to="/order-management">
+                      <Flex alignItems="center" _hover={{ color: "teal.500" }}>
+                        <Icon as={RiCalendarTodoLine} boxSize={4} />
+                        <MenuItem onClick={onClose}>
+                          <Text mt="0.5">Order Management</Text>
                         </MenuItem>
-                      </NavLink>
-                    </Flex>
+                      </Flex>
+                    </NavLink>
+                    <NavLink to="/user-management">
+                      <Flex alignItems="center" _hover={{ color: "teal.500" }}>
+                        <Icon as={FaUsers} boxSize={4} />
+                        <MenuItem onClick={onClose}>
+                          <Text mt="0.5">User Management</Text>
+                        </MenuItem>
+                      </Flex>
+                    </NavLink>
                   </MenuGroup>
                   <MenuDivider />
                 </Box>
@@ -134,12 +107,21 @@ const DrawerMenu = () => {
             <DrawerFooter>
               <Box>
                 <NavLink to="/login" onClick={onClose}>
-                  <Button mr={4} colorScheme="teal" variant="outline">
+                  <Button
+                    mr={4}
+                    colorScheme="teal"
+                    color={menuBgColor}
+                    variant="outline"
+                  >
                     Log in
                   </Button>
                 </NavLink>
                 <NavLink to="/signup" onClick={onClose}>
-                  <Button colorScheme="teal" variant="outline">
+                  <Button
+                    colorScheme="teal"
+                    color={menuBgColor}
+                    variant="outline"
+                  >
                     Sign in
                   </Button>
                 </NavLink>
@@ -148,7 +130,6 @@ const DrawerMenu = () => {
           </DrawerContent>
         </Drawer>
       </Box>
-      <ColorMode />
     </ChakraProvider>
   );
 };

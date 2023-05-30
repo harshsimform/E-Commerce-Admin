@@ -1,11 +1,20 @@
 import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import FormikControl from "../../formik/FormikControl";
-import { Box, Button, Flex, Text, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Text,
+  useColorModeValue,
+  useToast,
+} from "@chakra-ui/react";
 import { UserAuthFormValues } from "../../../interface/interface";
 
 const Login = () => {
   const toast = useToast();
+  const submitMenuBgColor = useColorModeValue("teal.400", "teal.600");
+  const resetMenuBgColor = useColorModeValue("red.400", "red.600");
 
   const initialValue: UserAuthFormValues = {
     email: "",
@@ -84,18 +93,24 @@ const Login = () => {
                   type="submit"
                   colorScheme="teal"
                   color="white"
-                  bgColor="teal.400"
+                  bgColor={submitMenuBgColor}
                   marginY={4}
+                  _hover={{
+                    bgColor: "teal.500",
+                  }}
                 >
                   Submit
                 </Button>
                 <Button
                   type="reset"
-                  colorScheme="teal"
+                  colorScheme="red"
                   color="white"
-                  bgColor="teal.400"
+                  bgColor={resetMenuBgColor}
                   marginY={4}
                   marginX={2}
+                  _hover={{
+                    bgColor: "red.500",
+                  }}
                 >
                   Reset
                 </Button>

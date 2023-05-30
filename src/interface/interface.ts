@@ -3,7 +3,8 @@ export interface IOption {
   value: string;
 }
 
-export interface IFormValues {
+export interface ProductFormValues {
+  _id: string;
   image?: string | undefined;
   name: string;
   discountedPrice: string;
@@ -42,4 +43,8 @@ export enum InputControlType {
   Input = "input",
   TextArea = "textarea",
   Select = "select",
+}
+
+export interface ImageCellProps {
+  value: string;
 }
