@@ -27,8 +27,6 @@ const ImageCell: React.FC<ImageCellProps> = ({ value }) => {
   );
 };
 
-// export default ImageCell;
-
 const Home = () => {
   const { colorMode } = useColorMode();
 
@@ -42,6 +40,7 @@ const Home = () => {
     { field: "discountedPrice" },
     { field: "originalPrice" },
     { field: "quantity" },
+    { field: "displaySection" },
     { field: "gender" },
     { field: "category" },
     { field: "recordDate" },

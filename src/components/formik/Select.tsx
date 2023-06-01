@@ -10,7 +10,13 @@ const Select = (props: Props) => {
       <FormLabel htmlFor={name} marginTop={2} color="teal.500">
         {label}
       </FormLabel>
-      <Field as={ChakraSelect} id={name} name={name} {...rest}>
+      <Field
+        as={ChakraSelect}
+        id={name}
+        name={name}
+        {...rest}
+        color={"gray.500"}
+      >
         {options?.map((option) => {
           return (
             <option key={option.value} value={option.value}>

@@ -1,11 +1,45 @@
 import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
-import FormikControl from "./FormikControl";
-import { ProductFormValues, IOption } from "../../interface/interface";
+import FormikControl from "../../formik/FormikControl";
+import { ProductFormValues } from "../../../interface/interface";
 import { Box, Button, useToast } from "@chakra-ui/react";
-import FileInput from "./FileInput";
+import FileInput from "../../formik/FileInput";
 import { useState } from "react";
-import API_BASE_URL from "../../api";
+import API_BASE_URL from "../../../api";
+import {
+  displaySection,
+  initialValue,
+  productCategory,
+  productGender,
+} from "../../../constants/constants";
+
+export const validationSchema = Yup.object({
+  image: Yup.string().required("Image is required"),
+  name: Yup.string().trim().required("Required"),
+  description: Yup.string()
+    .trim()
+    .required("Required")
+    .min(30, "Description at least be 30 characters long"),
+  gender: Yup.string().required("Required"),
+  category: Yup.string().required("Required"),
+  displaySection: Yup.string().required("Required"),
+  quantity: Yup.string()
+    .required("Required")
+    .test("is-positive", "Quantity must be greater than 0", (value) => {
+      return parseInt(value) > 0;
+    }),
+  discountedPrice: Yup.string()
+    .required("Required")
+    .test("is-positive", "Price must be greater than 0", (value) => {
+      return parseInt(value) > 0;
+    }),
+  originalPrice: Yup.number()
+    .required("Required")
+    .moreThan(
+      Yup.ref("discountedPrice"),
+      "Original price must be greater than discounted price"
+    ),
+});
 
 const ProductDetailsForm = () => {
   const toast = useToast();
@@ -15,78 +49,6 @@ const ProductDetailsForm = () => {
     setResetKey((prevKey) => prevKey + 1);
   };
 
-  const displaySection: IOption[] = [
-    { key: "Select gender", value: "" },
-    { key: "Top Picks", value: "top picks" },
-    { key: "Trending Now", value: "trending now" },
-    { key: "Flash Sale", value: "flash sale" },
-    { key: "Other", value: "other" },
-  ];
-
-  const productGender: IOption[] = [
-    { key: "Select gender", value: "" },
-    { key: "Male", value: "male" },
-    { key: "Female", value: "female" },
-    { key: "Both", value: "both" },
-  ];
-
-  const productCategory: IOption[] = [
-    { key: "Select category", value: "" },
-    { key: "Topwear", value: "topwear" },
-    { key: "Bottomwear", value: "bottomwear" },
-    { key: "Footwear", value: "footwear" },
-    { key: "Fashion Accessories", value: "fashion accessories" },
-    { key: "Indian Wear", value: "indian wear" },
-    { key: "Watches & Wearables", value: "watches and wearables" },
-    { key: "Jewelry", value: "jewelry" },
-    { key: "Makeup", value: "makeup" },
-    { key: "Haircare", value: "haircare" },
-    { key: "Fragrances", value: "fragrances" },
-    { key: "Appliances", value: "appliances" },
-    { key: "Home & Living", value: "home and living" },
-    { key: "Electronics", value: "electronics" },
-    { key: "Beauty", value: "beauty" },
-  ];
-
-  const initialValue: ProductFormValues = {
-    _id: "",
-    image: "",
-    name: "",
-    originalPrice: "",
-    discountedPrice: "",
-    description: "",
-    quantity: "",
-    displaySection: "",
-    gender: "",
-    category: "",
-  };
-  const validationSchema = Yup.object({
-    image: Yup.string().required("Image is required"),
-    name: Yup.string().trim().required("Required"),
-    description: Yup.string()
-      .trim()
-      .required("Required")
-      .min(30, "Description at least be 30 characters long"),
-    gender: Yup.string().required("Required"),
-    category: Yup.string().required("Required"),
-    displaySection: Yup.string().required("Required"),
-    quantity: Yup.string()
-      .required("Required")
-      .test("is-positive", "Quantity must be greater than 0", (value) => {
-        return parseInt(value) > 0;
-      }),
-    discountedPrice: Yup.string()
-      .required("Required")
-      .test("is-positive", "Price must be greater than 0", (value) => {
-        return parseInt(value) > 0;
-      }),
-    originalPrice: Yup.number()
-      .required("Required")
-      .moreThan(
-        Yup.ref("discountedPrice"),
-        "Original price must be greater than discounted price"
-      ),
-  });
   const onSubmit = async (
     values: ProductFormValues,
     onSubmitProps: FormikHelpers<ProductFormValues>
@@ -96,7 +58,6 @@ const ProductDetailsForm = () => {
 
     API_BASE_URL.post("/product", values)
       .then((res) => {
-        // Handle successful response
         toast({
           title: "New product has been added successfully",
           position: "top",

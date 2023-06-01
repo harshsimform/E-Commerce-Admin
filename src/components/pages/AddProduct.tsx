@@ -1,6 +1,6 @@
 import { Box, Text } from "@chakra-ui/react";
 import React from "react";
-import ProductDetailsForm from "../formik/ProductDetailsForm";
+import ProductDetailsForm from "./crud/ProductDetailsForm";
 
 const AddProduct = () => {
   return (
