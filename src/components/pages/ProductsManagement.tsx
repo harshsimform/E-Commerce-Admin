@@ -18,6 +18,13 @@ import {
   ModalBody,
   ModalCloseButton,
   Center,
+  Table,
+  Thead,
+  Tr,
+  Th,
+  Td,
+  Tbody,
+  TableContainer,
 } from "@chakra-ui/react";
 import { Image } from "@chakra-ui/react";
 import axios from "axios";
@@ -31,6 +38,7 @@ const selectedProductInitialValue = {
   originalPrice: "",
   description: "",
   quantity: "",
+  displaySection: "",
   gender: "",
   category: "",
 };
@@ -42,19 +50,15 @@ const ProductsManagement = () => {
   const [selectedProduct, setSelectedProduct] = useState<ProductFormValues>(
     selectedProductInitialValue
   );
-  const [isUpdateLoading, setIsUpdateLoading] = useState(false);
-  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isProductUpdateLoading, setIsProductUpdateLoading] = useState(false);
+  const [isProductDeleteLoading, setIsProductDeleteLoading] = useState("");
+  const [isProductEditing, setIsProductEditing] = useState(false);
   const toast = useToast();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const updateBgColor = useColorModeValue("teal.400", "teal.600");
-  const resetMenuBgColor = useColorModeValue("red.400", "red.600");
-
-  useEffect(() => {
-    fetchProductData();
-  }, []);
+  const updateButtonBgColor = useColorModeValue("teal.400", "teal.600");
+  const deleteButtonBgColor = useColorModeValue("red.400", "red.600");
 
   const fetchProductData = async () => {
     try {
@@ -65,21 +69,25 @@ const ProductsManagement = () => {
     }
   };
 
+  useEffect(() => {
+    fetchProductData();
+  }, []);
+
   const handleEdit = (product: ProductFormValues) => {
     onOpen();
     setSelectedProduct(product);
-    setIsEditing(true);
+    setIsProductEditing(true);
   };
 
   const handleUpdate = async () => {
-    setIsUpdateLoading(true);
+    setIsProductUpdateLoading(true);
     try {
       await axios.patch(
         `${API_BASE_URL}/${selectedProduct._id}`,
         selectedProduct
       );
       fetchProductData();
-      setIsEditing(false);
+      setIsProductEditing(false);
       setSelectedProduct(selectedProductInitialValue);
       toast({
         title: "Product updated successfully",
@@ -99,11 +107,11 @@ const ProductsManagement = () => {
         position: "top",
       });
     }
-    setIsUpdateLoading(false);
+    setIsProductUpdateLoading(false);
   };
 
   const handleDelete = async (productId: string) => {
-    setIsDeleteLoading(true);
+    setIsProductDeleteLoading(productId);
     try {
       await axios.delete(`${API_BASE_URL}/${productId}`);
       fetchProductData();
@@ -125,7 +133,7 @@ const ProductsManagement = () => {
         position: "top",
       });
     }
-    setIsDeleteLoading(false);
+    setIsProductDeleteLoading("");
   };
 
   return (
@@ -143,60 +151,95 @@ const ProductsManagement = () => {
           <h1>Products Management</h1>
         </Box>
       </center>
-      <Box maxWidth="800px" mx="auto" my="5">
+      <Box maxWidth="1000px" mx="auto" my="5">
         {rowData.length === 0 ? (
           <Center>
             <Text fontSize="xl">No products found.</Text>
           </Center>
         ) : (
-          <Stack spacing="4">
-            {rowData.map((product) => (
-              <Box key={product._id} p="4" borderWidth="1px" borderRadius="md">
-                <Image src={product.image} alt="image" width="15rem" />
-                <Text fontWeight="bold">Name: {product.name}</Text>
-                <Text>Category: {product.category}</Text>
-                <Text>Discounted Price: {product.discountedPrice}</Text>
-                <Text>Original Price: {product.originalPrice}</Text>
-                <Text>Description: {product.description}</Text>
-                <Text>Quantity: {product.quantity}</Text>
-                <Text>Gender: {product.gender}</Text>
-                <Text>Category: {product.category}</Text>
-                {!isEditing && (
-                  <Button
-                    colorScheme="teal"
-                    color="white"
-                    bgColor={updateBgColor}
-                    mt="2"
-                    onClick={() => handleEdit(product)}
-                    _hover={{
-                      bgColor: "teal.500",
-                    }}
-                  >
-                    Edit
-                  </Button>
-                )}
-                <Button
-                  colorScheme="red"
-                  bgColor={resetMenuBgColor}
-                  color="white"
-                  mt="2"
-                  ml="2"
-                  onClick={() => handleDelete(product._id)}
-                  isLoading={isDeleteLoading}
-                  loadingText="Deleting"
-                >
-                  Delete
-                </Button>
-              </Box>
-            ))}
+          <Stack>
+            <Box p="4" mx="6" borderWidth="1px" borderRadius="md">
+              <TableContainer>
+                <Table variant="simple">
+                  <Thead>
+                    <Tr>
+                      <Th fontSize="md" color="teal.500">
+                        Image
+                      </Th>
+                      <Th fontSize="md" color="teal.500">
+                        Product Id
+                      </Th>
+                      <Th fontSize="md" color="teal.500">
+                        Name
+                      </Th>
+                      <Th fontSize="md" color="teal.500">
+                        Edit
+                      </Th>
+                      <Th fontSize="md" color="teal.500">
+                        Delete
+                      </Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {rowData.map((product) => (
+                      <Tr key={product._id}>
+                        <Td>
+                          <Image
+                            src={product.image}
+                            alt="Product Image"
+                            width="70px"
+                          />
+                        </Td>
+                        <Td color="gray.500">{product._id}</Td>
+                        <Td color="gray.500">{product.name}</Td>
+                        <Td>
+                          <Button
+                            colorScheme="teal"
+                            color="white"
+                            size="md"
+                            bgColor={updateButtonBgColor}
+                            onClick={() => handleEdit(product)}
+                            _hover={{
+                              bgColor: "teal.500",
+                            }}
+                          >
+                            Edit
+                          </Button>
+                        </Td>
+                        <Td>
+                          <Button
+                            colorScheme="red"
+                            size="md"
+                            color="white"
+                            bgColor={deleteButtonBgColor}
+                            onClick={() => handleDelete(product._id)}
+                            isLoading={
+                              product._id === isProductDeleteLoading
+                                ? true
+                                : false
+                            }
+                            loadingText="Deleting"
+                            _hover={{
+                              bgColor: "red.500",
+                            }}
+                          >
+                            Delete
+                          </Button>
+                        </Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                </Table>
+              </TableContainer>
+            </Box>
           </Stack>
         )}
-        {isEditing && (
+        {isProductEditing && (
           <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent mx="5">
               <ModalHeader>Create your account</ModalHeader>
-              <ModalCloseButton onClick={() => setIsEditing(false)} />
+              <ModalCloseButton onClick={() => setIsProductEditing(false)} />
               <ModalBody pb={6}>
                 <FormControl id="name">
                   <FormLabel>Name</FormLabel>
@@ -207,6 +250,84 @@ const ProductsManagement = () => {
                       setSelectedProduct({
                         ...selectedProduct,
                         name: e.target.value,
+                      })
+                    }
+                  />
+                </FormControl>
+                <FormControl id="discountedPrice" mt="2">
+                  <FormLabel>Discounted Price</FormLabel>
+                  <Input
+                    type="number"
+                    value={selectedProduct.discountedPrice || ""}
+                    onChange={(e) =>
+                      setSelectedProduct({
+                        ...selectedProduct,
+                        discountedPrice: e.target.value,
+                      })
+                    }
+                  />
+                </FormControl>{" "}
+                <FormControl id="originalPrice" mt="2">
+                  <FormLabel>Original Price</FormLabel>
+                  <Input
+                    type="number"
+                    value={selectedProduct.originalPrice || ""}
+                    onChange={(e) =>
+                      setSelectedProduct({
+                        ...selectedProduct,
+                        originalPrice: e.target.value,
+                      })
+                    }
+                  />
+                </FormControl>
+                <FormControl id="description" mt="2">
+                  <FormLabel>Description</FormLabel>
+                  <Input
+                    type="text"
+                    value={selectedProduct.description || ""}
+                    onChange={(e) =>
+                      setSelectedProduct({
+                        ...selectedProduct,
+                        description: e.target.value,
+                      })
+                    }
+                  />
+                </FormControl>{" "}
+                <FormControl id="quantity" mt="2">
+                  <FormLabel>Quantity</FormLabel>
+                  <Input
+                    type="text"
+                    value={selectedProduct.quantity || ""}
+                    onChange={(e) =>
+                      setSelectedProduct({
+                        ...selectedProduct,
+                        quantity: e.target.value,
+                      })
+                    }
+                  />
+                </FormControl>
+                <FormControl id="displaySection" mt="2">
+                  <FormLabel>Display Section</FormLabel>
+                  <Input
+                    type="text"
+                    value={selectedProduct.displaySection || ""}
+                    onChange={(e) =>
+                      setSelectedProduct({
+                        ...selectedProduct,
+                        displaySection: e.target.value,
+                      })
+                    }
+                  />
+                </FormControl>
+                <FormControl id="gender" mt="2">
+                  <FormLabel>Gender</FormLabel>
+                  <Input
+                    type="text"
+                    value={selectedProduct.gender || ""}
+                    onChange={(e) =>
+                      setSelectedProduct({
+                        ...selectedProduct,
+                        gender: e.target.value,
                       })
                     }
                   />
@@ -224,28 +345,15 @@ const ProductsManagement = () => {
                     }
                   />
                 </FormControl>
-                <FormControl id="price" mt="2">
-                  <FormLabel>Price</FormLabel>
-                  <Input
-                    type="number"
-                    value={selectedProduct.discountedPrice || ""}
-                    onChange={(e) =>
-                      setSelectedProduct({
-                        ...selectedProduct,
-                        discountedPrice: e.target.value,
-                      })
-                    }
-                  />
-                </FormControl>
-                <FormControl id="description" mt="2">
-                  <FormLabel>Description</FormLabel>
+                <FormControl id="category" mt="2">
+                  <FormLabel>Category</FormLabel>
                   <Input
                     type="text"
-                    value={selectedProduct.description || ""}
+                    value={selectedProduct.category || ""}
                     onChange={(e) =>
                       setSelectedProduct({
                         ...selectedProduct,
-                        description: e.target.value,
+                        category: e.target.value,
                       })
                     }
                   />
@@ -256,12 +364,14 @@ const ProductsManagement = () => {
                   colorScheme="blue"
                   mr={3}
                   onClick={handleUpdate}
-                  isLoading={isUpdateLoading}
+                  isLoading={isProductUpdateLoading}
                   loadingText="Updating"
                 >
                   Save
                 </Button>
-                <Button onClick={() => setIsEditing(false)}>Cancel</Button>
+                <Button onClick={() => setIsProductEditing(false)}>
+                  Cancel
+                </Button>
               </ModalFooter>
             </ModalContent>
           </Modal>

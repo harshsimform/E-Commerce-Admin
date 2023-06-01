@@ -7,6 +7,9 @@ import { useState, useEffect } from "react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { ImageCellProps } from "../../interface/interface";
+import axios from "axios";
+
+const API_BASE_URL = "https://shopzify-products.onrender.com/product";
 
 const ImageCell: React.FC<ImageCellProps> = ({ value }) => {
   const handleClick = () => {
@@ -44,15 +47,17 @@ const Home = () => {
     { field: "recordDate" },
   ]);
 
-  useEffect(() => {
-    fetch("https://shopzify-products.onrender.com/product")
-      .then((result) => result.json())
-      .then((data) => {
-        const { productDetails } = data;
-        console.log(productDetails);
+  const fetchProductDetails = async () => {
+    try {
+      const response = await axios.get(API_BASE_URL);
+      setRowData(response.data.productDetails);
+    } catch (error) {
+      console.error("Error fetching product data:", error);
+    }
+  };
 
-        setRowData(productDetails);
-      });
+  useEffect(() => {
+    fetchProductDetails();
   }, []);
 
   const defaultColDef = useMemo<ColDef>(() => {

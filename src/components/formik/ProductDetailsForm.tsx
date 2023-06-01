@@ -15,10 +15,19 @@ const ProductDetailsForm = () => {
     setResetKey((prevKey) => prevKey + 1);
   };
 
+  const displaySection: IOption[] = [
+    { key: "Select gender", value: "" },
+    { key: "Top Picks", value: "top picks" },
+    { key: "Trending Now", value: "trending now" },
+    { key: "Flash Sale", value: "flash sale" },
+    { key: "Other", value: "other" },
+  ];
+
   const productGender: IOption[] = [
     { key: "Select gender", value: "" },
     { key: "Male", value: "male" },
     { key: "Female", value: "female" },
+    { key: "Both", value: "both" },
   ];
 
   const productCategory: IOption[] = [
@@ -47,6 +56,7 @@ const ProductDetailsForm = () => {
     discountedPrice: "",
     description: "",
     quantity: "",
+    displaySection: "",
     gender: "",
     category: "",
   };
@@ -59,6 +69,7 @@ const ProductDetailsForm = () => {
       .min(30, "Description at least be 30 characters long"),
     gender: Yup.string().required("Required"),
     category: Yup.string().required("Required"),
+    displaySection: Yup.string().required("Required"),
     quantity: Yup.string()
       .required("Required")
       .test("is-positive", "Quantity must be greater than 0", (value) => {
@@ -154,6 +165,12 @@ const ProductDetailsForm = () => {
               label="Available Quantity"
               name="quantity"
               placeholder="Please enter available product quantity"
+            />
+            <FormikControl
+              control="select"
+              label="Select Display Section"
+              name="displaySection"
+              options={displaySection}
             />
             <FormikControl
               control="select"

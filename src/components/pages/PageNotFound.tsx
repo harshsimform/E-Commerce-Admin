@@ -1,7 +1,7 @@
-import { Box, Button, Container, Image, Spacer } from "@chakra-ui/react";
+import { Box, Button, Container, Image, Spacer, Text } from "@chakra-ui/react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import PageNotFoundImg from "/public/404-error.gif";
+import PageNotFoundImg from "/404-error.gif";
 
 const PageNotFound = () => {
   const navigate = useNavigate();

@@ -11,6 +11,7 @@ export interface ProductFormValues {
   originalPrice: string;
   description: string;
   quantity: string;
+  displaySection: string;
   gender: string;
   category: string;
 }
