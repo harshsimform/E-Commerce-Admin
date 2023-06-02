@@ -26,7 +26,6 @@ import FileInput from "../../formik/FileInput";
 import {
   displaySection,
   initialValue,
-  productCategory,
   productGender,
 } from "../../../constants/constants";
 import { validationSchema } from "./ProductDetailsForm";
@@ -42,11 +41,11 @@ const ProductCrudManagement = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const API_BASE_URL = "https://shopzify-products.onrender.com/product";
+  const environment = import.meta.env;
 
   const fetchProductData = async () => {
     try {
-      const response = await axios.get(API_BASE_URL);
+      const response = await axios.get(environment.VITE_API_BASE_URL);
       setRowData(response.data.productDetails);
     } catch (error) {
       console.error("Error fetching product data:", error);
@@ -72,7 +71,10 @@ const ProductCrudManagement = () => {
 
     setIsProductUpdateLoading(true);
     try {
-      await axios.patch(`${API_BASE_URL}/${selectedProduct._id}`, values);
+      await axios.patch(
+        `${environment.VITE_API_BASE_URL}/${selectedProduct._id}`,
+        values
+      );
       fetchProductData();
       setIsProductEditing(false);
       setSelectedProduct(initialValue);
@@ -114,7 +116,7 @@ const ProductCrudManagement = () => {
   const handleDelete = async (productId: string) => {
     setIsProductDeleteLoading(productId);
     try {
-      await axios.delete(`${API_BASE_URL}/${productId}`);
+      await axios.delete(`${environment.VITE_API_BASE_URL}/${productId}`);
       fetchProductData();
       toast({
         title: "Product deleted successfully",
@@ -223,13 +225,12 @@ const ProductCrudManagement = () => {
                           options={productGender}
                         />
                         <FormikControl
-                          control="select"
-                          label="Select Category"
+                          control="input"
+                          label="Product Category"
                           name="category"
-                          options={productCategory}
+                          placeholder="please enter product category name"
                         />
-
-                        <ModalFooter>
+                        <ModalFooter mt={5}>
                           <Button
                             colorScheme="blue"
                             mr={3}

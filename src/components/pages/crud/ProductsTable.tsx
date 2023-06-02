@@ -59,7 +59,8 @@ const ProductsTable = ({
                   <Image
                     src={product.image}
                     alt="Product Image"
-                    boxSize={100}
+                    width={"4rem"}
+                    height={"4rem"}
                     borderRadius="md"
                   />
                 </Td>

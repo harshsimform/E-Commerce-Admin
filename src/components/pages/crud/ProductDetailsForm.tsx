@@ -5,13 +5,14 @@ import { ProductFormValues } from "../../../interface/interface";
 import { Box, Button, useToast } from "@chakra-ui/react";
 import FileInput from "../../formik/FileInput";
 import { useState } from "react";
-import API_BASE_URL from "../../../api";
 import {
   displaySection,
   initialValue,
-  productCategory,
   productGender,
 } from "../../../constants/constants";
+import axios from "axios";
+
+const environment = import.meta.env;
 
 export const validationSchema = Yup.object({
   image: Yup.string().required("Image is required"),
@@ -55,25 +56,23 @@ const ProductDetailsForm = () => {
   ) => {
     onSubmitProps.resetForm();
     setResetKey((prevKey) => prevKey + 1);
-
-    API_BASE_URL.post("/product", values)
-      .then((res) => {
-        toast({
-          title: "New product has been added successfully",
-          position: "top",
-          status: "success",
-          isClosable: true,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-        toast({
-          title: "Error occurred while adding the product",
-          position: "top",
-          status: "error",
-          isClosable: true,
-        });
+    try {
+      await axios.post(`${environment.VITE_API_BASE_URL}`, values);
+      toast({
+        title: "New product has been added successfully",
+        position: "top",
+        status: "success",
+        isClosable: true,
       });
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Error occurred while adding the product",
+        position: "top",
+        status: "error",
+        isClosable: true,
+      });
+    }
   };
 
   return (
@@ -140,10 +139,10 @@ const ProductDetailsForm = () => {
               options={productGender}
             />
             <FormikControl
-              control="select"
-              label="Select Category"
+              control="input"
+              label="Product Category"
               name="category"
-              options={productCategory}
+              placeholder="please enter product category name"
             />
             <Button
               type="submit"

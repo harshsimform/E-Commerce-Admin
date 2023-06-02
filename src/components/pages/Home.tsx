@@ -9,7 +9,7 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 import { ImageCellProps } from "../../interface/interface";
 import axios from "axios";
 
-const API_BASE_URL = "https://shopzify-products.onrender.com/product";
+const environment = import.meta.env;
 
 const ImageCell: React.FC<ImageCellProps> = ({ value }) => {
   const handleClick = () => {
@@ -48,7 +48,7 @@ const Home = () => {
 
   const fetchProductDetails = async () => {
     try {
-      const response = await axios.get(API_BASE_URL);
+      const response = await axios.get(environment.VITE_API_BASE_URL);
       setRowData(response.data.productDetails);
     } catch (error) {
       console.error("Error fetching product data:", error);
