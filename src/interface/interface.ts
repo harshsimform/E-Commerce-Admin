@@ -49,3 +49,10 @@ export enum InputControlType {
 export interface ImageCellProps {
   value: string;
 }
+
+export interface NavItem {
+  label: string;
+  subLabel?: string;
+  children?: Array<NavItem>;
+  to: string;
+}

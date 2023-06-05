@@ -1,11 +1,11 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import DrawerMenu from "../drawerMenu/DrawerMenu";
+import Navbar from "../navbar/Navbar";
 
 const Root = () => {
   return (
     <>
-      <DrawerMenu />
+      <Navbar />
       <Outlet />
     </>
   );

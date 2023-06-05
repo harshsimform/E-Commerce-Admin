@@ -1,8 +1,10 @@
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Text, useBreakpointValue } from "@chakra-ui/react";
 import React from "react";
 import ProductDetailsForm from "./crud/ProductDetailsForm";
 
 const AddProduct = () => {
+  const isScreenFixed = useBreakpointValue({ base: false, md: true });
+
   return (
     <>
       <Box
@@ -12,6 +14,7 @@ const AddProduct = () => {
         fontWeight={500}
         color={"teal.400"}
         fontSize="3xl"
+        marginTop={isScreenFixed ? "5rem" : "1rem"}
       >
         <Text>Add Product</Text>
       </Box>

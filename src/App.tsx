@@ -18,7 +18,6 @@ const LazySignup = lazy(
 );
 const LazyLogin = lazy(() => import("./components/pages/authentication/Login"));
 const LazyPageNotFound = lazy(() => import("./components/pages/PageNotFound"));
-import ColorMode from "./components/colorMode/ColorMode";
 
 import "./App.css";
 import SuspenseLoading from "./components/pages/SuspenseLoading";
@@ -26,7 +25,11 @@ import SuspenseLoading from "./components/pages/SuspenseLoading";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <LazyRoot />,
+    element: (
+      <Suspense fallback={<SuspenseLoading />}>
+        <LazyRoot />
+      </Suspense>
+    ),
     errorElement: <LazyPageNotFound />,
     children: [
       {
@@ -89,13 +92,12 @@ const router = createBrowserRouter([
   },
 ]);
 
-function App() {
+const App = () => {
   return (
     <>
       <RouterProvider router={router} />
-      <ColorMode />
     </>
   );
-}
+};
 
 export default App;

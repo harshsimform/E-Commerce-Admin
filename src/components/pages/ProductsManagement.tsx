@@ -1,7 +1,8 @@
-import { Box } from "@chakra-ui/react";
+import { Box, useBreakpointValue } from "@chakra-ui/react";
 import ProductCrudManagement from "./crud/ProductCrudManagement";
 
 const ProductsManagement = () => {
+  const isScreenFixed = useBreakpointValue({ base: false, md: true });
   return (
     <>
       <center>
@@ -13,6 +14,7 @@ const ProductsManagement = () => {
           fontWeight={500}
           color={"teal.400"}
           fontSize="3xl"
+          marginTop={isScreenFixed ? "5rem" : "1rem"}
         >
           <h1>Products Management</h1>
         </Box>

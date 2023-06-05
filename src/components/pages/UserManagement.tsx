@@ -1,7 +1,7 @@
-import { Box } from "@chakra-ui/react";
-import React from "react";
+import { Box, useBreakpointValue } from "@chakra-ui/react";
 
 const UserManagement = () => {
+  const isScreenFixed = useBreakpointValue({ base: false, md: true });
   return (
     <>
       <center>
@@ -13,6 +13,7 @@ const UserManagement = () => {
           fontWeight={500}
           color={"teal.400"}
           fontSize="3xl"
+          marginTop={isScreenFixed ? "5rem" : "1rem"}
         >
           <h1>User Management Page</h1>
         </Box>

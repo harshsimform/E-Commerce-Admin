@@ -10,7 +10,7 @@ const ColorMode = () => {
         <IconButton
           aria-label="dark-mode"
           isRound={true}
-          size="md"
+          size="sm"
           onClick={toggleColorMode}
         >
           {colorMode === "light" ? <FaMoon /> : <FaSun />}

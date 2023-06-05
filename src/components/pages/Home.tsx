@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Box, Link, useColorMode } from "@chakra-ui/react";
+import { Box, Link, useBreakpointValue, useColorMode } from "@chakra-ui/react";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { useState, useEffect } from "react";
@@ -29,6 +29,7 @@ const ImageCell: React.FC<ImageCellProps> = ({ value }) => {
 
 const Home = () => {
   const { colorMode } = useColorMode();
+  const isScreenFixed = useBreakpointValue({ base: false, md: true });
 
   const [rowData, setRowData] = useState([]);
 
@@ -80,6 +81,7 @@ const Home = () => {
           fontWeight={500}
           color={"teal.400"}
           fontSize="3xl"
+          marginTop={isScreenFixed ? "5rem" : "1rem"}
         >
           <h1>Product Summary</h1>
         </Box>
