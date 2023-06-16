@@ -16,6 +16,10 @@ export interface ProductFormValues {
   category: string;
 }
 
+export interface ProductResponse {
+  productDetails: ProductFormValues[];
+}
+
 export interface UserAuthFormValues {
   name?: string;
   email: string;

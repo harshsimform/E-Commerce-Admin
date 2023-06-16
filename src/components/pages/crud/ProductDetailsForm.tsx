@@ -10,9 +10,7 @@ import {
   initialValue,
   productGender,
 } from "../../../constants/constants";
-import axios from "axios";
-
-const environment = import.meta.env;
+import { useAddProductDataMutation } from "../../../redux/apiSlice/apiSlice";
 
 export const validationSchema = Yup.object({
   image: Yup.string().required("Image is required"),
@@ -50,6 +48,8 @@ const ProductDetailsForm = () => {
     setResetKey((prevKey) => prevKey + 1);
   };
 
+  const [addProductData] = useAddProductDataMutation();
+
   const onSubmit = async (
     values: ProductFormValues,
     onSubmitProps: FormikHelpers<ProductFormValues>
@@ -57,7 +57,7 @@ const ProductDetailsForm = () => {
     onSubmitProps.resetForm();
     setResetKey((prevKey) => prevKey + 1);
     try {
-      await axios.post(`${environment.VITE_API_BASE_URL}`, values);
+      await addProductData(values).unwrap();
       toast({
         title: "New product has been added successfully",
         position: "top",

@@ -3,13 +3,10 @@ import { Box, Link, useBreakpointValue, useColorMode } from "@chakra-ui/react";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { useState, useEffect } from "react";
-
+import { ImageCellProps, ProductFormValues } from "../../interface/interface";
+import { useGetProductDataQuery } from "../../redux/apiSlice/apiSlice";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
-import { ImageCellProps } from "../../interface/interface";
-import axios from "axios";
-
-const environment = import.meta.env;
 
 const ImageCell: React.FC<ImageCellProps> = ({ value }) => {
   const handleClick = () => {
@@ -31,9 +28,16 @@ const Home = () => {
   const { colorMode } = useColorMode();
   const isScreenFixed = useBreakpointValue({ base: false, md: true });
 
-  const [rowData, setRowData] = useState([]);
+  const { data: productData } = useGetProductDataQuery();
 
-  const [columnDefs, setColumnDefs] = useState([
+  const [rowData, setRowData] = useState<ProductFormValues[]>([]);
+  useEffect(() => {
+    if (productData) {
+      setRowData(productData.productDetails);
+    }
+  }, [productData]);
+
+  const [columnDefs] = useState([
     { field: "_id" },
     { field: "name" },
     { headerName: "Image", field: "image", cellRenderer: ImageCell },
@@ -46,19 +50,6 @@ const Home = () => {
     { field: "category" },
     { field: "recordDate" },
   ]);
-
-  const fetchProductDetails = async () => {
-    try {
-      const response = await axios.get(environment.VITE_API_BASE_URL);
-      setRowData(response.data.productDetails);
-    } catch (error) {
-      console.error("Error fetching product data:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchProductDetails();
-  }, []);
 
   const defaultColDef = useMemo<ColDef>(() => {
     return {

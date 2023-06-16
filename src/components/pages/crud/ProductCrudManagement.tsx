@@ -16,7 +16,6 @@ import {
   Center,
   Divider,
 } from "@chakra-ui/react";
-import axios from "axios";
 import { ProductFormValues } from "../../../interface/interface";
 import ProductsTable from "./ProductsTable";
 
@@ -29,6 +28,11 @@ import {
   productGender,
 } from "../../../constants/constants";
 import { validationSchema } from "./ProductDetailsForm";
+import {
+  useDeleteProductMutation,
+  useGetProductDataQuery,
+  useUpdateProductMutation,
+} from "../../../redux/apiSlice/apiSlice";
 
 const ProductCrudManagement = () => {
   const [rowData, setRowData] = useState<ProductFormValues[]>([]);
@@ -41,20 +45,15 @@ const ProductCrudManagement = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const environment = import.meta.env;
-
-  const fetchProductData = async () => {
-    try {
-      const response = await axios.get(environment.VITE_API_BASE_URL);
-      setRowData(response.data.productDetails);
-    } catch (error) {
-      console.error("Error fetching product data:", error);
-    }
-  };
+  const { data: productData } = useGetProductDataQuery();
+  const [updateProductMutation] = useUpdateProductMutation();
+  const [deleteProductMutation] = useDeleteProductMutation();
 
   useEffect(() => {
-    fetchProductData();
-  }, []);
+    if (productData) {
+      setRowData(productData.productDetails);
+    }
+  }, [productData]);
 
   const handleEdit = (product: ProductFormValues) => {
     onOpen();
@@ -71,11 +70,7 @@ const ProductCrudManagement = () => {
 
     setIsProductUpdateLoading(true);
     try {
-      await axios.patch(
-        `${environment.VITE_API_BASE_URL}/${selectedProduct._id}`,
-        values
-      );
-      fetchProductData();
+      await updateProductMutation({ ...values, _id: selectedProduct._id });
       setIsProductEditing(false);
       setSelectedProduct(initialValue);
       toast({
@@ -85,7 +80,6 @@ const ProductCrudManagement = () => {
         isClosable: true,
         position: "top",
       });
-      // formik.resetForm();
     } catch (error) {
       console.error("Error updating product:", error);
       toast({
@@ -116,8 +110,7 @@ const ProductCrudManagement = () => {
   const handleDelete = async (productId: string) => {
     setIsProductDeleteLoading(productId);
     try {
-      await axios.delete(`${environment.VITE_API_BASE_URL}/${productId}`);
-      fetchProductData();
+      await deleteProductMutation(productId);
       toast({
         title: "Product deleted successfully",
         status: "warning",

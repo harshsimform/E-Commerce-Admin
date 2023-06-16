@@ -9,9 +9,12 @@ import {
   Td,
   Tbody,
   TableContainer,
+  Text,
 } from "@chakra-ui/react";
 import { Image } from "@chakra-ui/react";
 import { ProductFormValues } from "../../../interface/interface";
+import { FiEdit2 } from "react-icons/fi";
+import { DeleteIcon } from "@chakra-ui/icons";
 
 interface ProductsTableProps {
   rowData: ProductFormValues[];
@@ -77,7 +80,7 @@ const ProductsTable = ({
                       bgColor: "teal.500",
                     }}
                   >
-                    Update
+                    <FiEdit2 /> <Text ml={2}>Update</Text>
                   </Button>
                 </Td>
                 <Td>
@@ -95,7 +98,8 @@ const ProductsTable = ({
                       bgColor: "red.500",
                     }}
                   >
-                    Delete
+                    <DeleteIcon />
+                    <Text ml={2}>Delete</Text>
                   </Button>
                 </Td>
               </Tr>
