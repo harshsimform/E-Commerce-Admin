@@ -1,4 +1,8 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import { lazy, Suspense } from "react";
 const LazyHome = lazy(() => import("./components/pages/Home"));
 const LazyRoot = lazy(() => import("./components/pages/Root"));
@@ -13,30 +17,56 @@ const LazyUserManagement = lazy(
   () => import("./components/pages/UserManagement")
 );
 
-const LazySignup = lazy(
-  () => import("./components/pages/authentication/Signup")
-);
 const LazyLogin = lazy(() => import("./components/pages/authentication/Login"));
 const LazyPageNotFound = lazy(() => import("./components/pages/PageNotFound"));
 
 import "./App.css";
 import SuspenseLoading from "./components/pages/SuspenseLoading";
+import { useAppSelector } from "./redux/store";
+import { selectIsLoggedIn } from "./redux/authSlice/authSlice";
 
-const router = createBrowserRouter([
+const ProtectedRoute = ({
+  component: Component,
+}: {
+  component: JSX.Element;
+}) => {
+  const isLoggedIn = useAppSelector(selectIsLoggedIn);
+
+  return isLoggedIn ? <Navigate to="/" /> : Component;
+};
+
+const ProtectedRouteTwo = ({
+  component: Component,
+}: {
+  component: JSX.Element;
+}) => {
+  const isLoggedIn = useAppSelector(selectIsLoggedIn);
+
+  return isLoggedIn ? Component : <Navigate to="/login" />;
+};
+
+const mainRoutes = [
   {
     path: "/",
     element: (
       <Suspense fallback={<SuspenseLoading />}>
-        <LazyRoot />
+        <ProtectedRouteTwo component={<LazyRoot />} />
       </Suspense>
     ),
-    errorElement: <LazyPageNotFound />,
     children: [
       {
         path: "/",
         element: (
           <Suspense fallback={<SuspenseLoading />}>
-            <LazyHome />
+            <ProtectedRouteTwo component={<LazyHome />} />,
+          </Suspense>
+        ),
+      },
+      {
+        path: "*",
+        element: (
+          <Suspense fallback={<SuspenseLoading />}>
+            <LazyPageNotFound />
           </Suspense>
         ),
       },
@@ -72,25 +102,22 @@ const router = createBrowserRouter([
           </Suspense>
         ),
       },
-      {
-        path: "/signup",
-        element: (
-          <Suspense fallback={<SuspenseLoading />}>
-            <LazySignup />
-          </Suspense>
-        ),
-      },
-      {
-        path: "/login",
-        element: (
-          <Suspense fallback={<SuspenseLoading />}>
-            <LazyLogin />
-          </Suspense>
-        ),
-      },
     ],
   },
-]);
+];
+
+const authRoutes = [
+  {
+    path: "/login",
+    element: (
+      <Suspense fallback={<SuspenseLoading />}>
+        <ProtectedRoute component={<LazyLogin />} />
+      </Suspense>
+    ),
+  },
+];
+
+const router = createBrowserRouter([...mainRoutes, ...authRoutes]);
 
 const App = () => {
   return (

@@ -4,17 +4,26 @@ import FormikControl from "../../formik/FormikControl";
 import {
   Box,
   Button,
+  Center,
   Flex,
+  HStack,
   Text,
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
 import { UserAuthFormValues } from "../../../interface/interface";
+import { NavLink, useNavigate } from "react-router-dom";
+import { AiFillShop } from "react-icons/ai";
+import { useAppDispatch } from "../../../redux/store";
+import { setLoggedIn } from "../../../redux/authSlice/authSlice";
+import { useLoginMutation } from "../../../redux/apiSlice/apiSlice";
 
 const Login = () => {
   const toast = useToast();
   const submitMenuBgColor = useColorModeValue("teal.400", "teal.600");
   const resetMenuBgColor = useColorModeValue("red.400", "red.600");
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const initialValue: UserAuthFormValues = {
     email: "",
@@ -30,18 +39,40 @@ const Login = () => {
       .min(8, "Password must be 8 characters long")
       .required("Password is required"),
   });
-  const onSubmit = async (
-    values: UserAuthFormValues,
-    onSubmitProps: FormikHelpers<UserAuthFormValues>
-  ) => {
-    onSubmitProps.resetForm();
-    console.log(values);
-    toast({
-      title: "You have successfully signed in",
-      position: "top",
-      status: "success",
-      isClosable: true,
-    });
+
+  const [loginUser] = useLoginMutation();
+
+  const onSubmit = async (values: UserAuthFormValues) => {
+    try {
+      const response = await loginUser({
+        email: values.email,
+        password: values.password,
+      }).unwrap();
+      navigate("/");
+      dispatch(setLoggedIn(response.accessToken));
+      toast({
+        title: "You have successfully logged in",
+        position: "top",
+        status: "success",
+        isClosable: true,
+      });
+    } catch (err: any) {
+      if (err.data.message) {
+        toast({
+          title: err.data.message,
+          position: "top",
+          status: "error",
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: "oops, please try again!",
+          position: "top",
+          status: "error",
+          isClosable: true,
+        });
+      }
+    }
   };
 
   return (
@@ -58,11 +89,18 @@ const Login = () => {
         padding={6}
         borderWidth="1px"
         borderRadius="lg"
-        marginBottom="5rem"
       >
         <Box>
-          <Text fontSize="4xl" mb={4} textColor="teal">
-            Login
+          <Flex fontSize={40} alignItems="center">
+            <Text>
+              <AiFillShop fontSize={40} fill="teal" />
+            </Text>
+            <Text fontFamily={"cursive"} color="teal" marginX={1}>
+              Shopzify
+            </Text>
+          </Flex>
+          <Text fontSize="2xl" my={4} textColor="gray.600">
+            Login to your account
           </Text>
         </Box>
         <Formik
@@ -82,12 +120,11 @@ const Login = () => {
 
               <FormikControl
                 control="input"
-                type="text"
+                type="password"
                 label="Password"
                 name="password"
                 placeholder="Enter your password"
               />
-
               <Box textAlign="left">
                 <Button
                   type="submit"

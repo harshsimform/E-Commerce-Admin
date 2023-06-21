@@ -60,3 +60,25 @@ export interface NavItem {
   children?: Array<NavItem>;
   to: string;
 }
+
+export interface AuthState {
+  isLoggedIn: boolean;
+  accessToken: string;
+}
+
+export interface LoginResponse {
+  accessToken: string;
+}
+
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+export interface RefreshResponse {
+  token: string;
+}
+
+export interface RefreshCredentials {
+  refreshToken: string;
+}
