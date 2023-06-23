@@ -2,7 +2,7 @@ import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import FormikControl from "../../formik/FormikControl";
 import { ProductFormValues } from "../../../interface/interface";
-import { Box, Button, useToast } from "@chakra-ui/react";
+import { Box, Button, useColorModeValue, useToast } from "@chakra-ui/react";
 import FileInput from "../../formik/FileInput";
 import { useState } from "react";
 import {
@@ -41,6 +41,8 @@ export const validationSchema = Yup.object({
 });
 
 const ProductDetailsForm = () => {
+  const submitMenuBgColor = useColorModeValue("teal.400", "teal.600");
+  const resetMenuBgColor = useColorModeValue("red.400", "red.600");
   const toast = useToast();
   const [resetKey, setResetKey] = useState(0);
 
@@ -148,19 +150,24 @@ const ProductDetailsForm = () => {
               type="submit"
               colorScheme="teal"
               color="white"
-              bgColor="teal.400"
+              bgColor={submitMenuBgColor}
               marginY={4}
+              _hover={{
+                bgColor: "teal.500",
+              }}
             >
               Submit
             </Button>
             <Button
               type="reset"
-              colorScheme="teal"
+              colorScheme="red"
               color="white"
-              bgColor="teal.400"
+              bgColor={resetMenuBgColor}
               marginY={4}
               marginX={2}
-              onClick={handleReset}
+              _hover={{
+                bgColor: "red.500",
+              }}
             >
               Reset
             </Button>

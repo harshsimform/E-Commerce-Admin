@@ -5,16 +5,25 @@ import {
   useBreakpointValue,
   useColorModeValue,
 } from "@chakra-ui/react";
-import ProductCrudManagement from "./crud/ProductCrudManagement";
+import NavItemForm from "./NavRoutes";
 
-const ProductsManagement = () => {
+const NavbarManagement = () => {
   const isScreenFixed = useBreakpointValue({ base: false, md: true });
   const headingColor = useColorModeValue("teal.400", "teal.500");
 
   return (
     <>
       <center>
-        <Box marginX={4} marginTop={isScreenFixed ? "4.3rem" : "1rem"}>
+        <Box
+          width={10 / 12}
+          textAlign={"center"}
+          justifyContent={"center"}
+          display={"flex"}
+          fontWeight={500}
+          color={"teal.400"}
+          fontSize="3xl"
+          marginTop={isScreenFixed ? "5rem" : "1rem"}
+        >
           <Center>
             <Heading
               my={2}
@@ -23,14 +32,14 @@ const ProductsManagement = () => {
               colorScheme={"teal"}
               color={headingColor}
             >
-              Products Management
+              Navbar Management
             </Heading>
           </Center>
         </Box>
+        <NavItemForm />
       </center>
-      <ProductCrudManagement />
     </>
   );
 };
 
-export default ProductsManagement;
+export default NavbarManagement;

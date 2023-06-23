@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
+  GetCheckoutData,
   LoginCredentials,
   LoginResponse,
   ProductFormValues,
@@ -49,7 +50,7 @@ const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
 const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: baseQueryWithReauth,
-  tagTypes: ["Product"],
+  tagTypes: ["Product", "Checkout"],
   endpoints: (builder) => ({}),
 });
 
@@ -82,6 +83,10 @@ export const api = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Product"],
     }),
+    getCheckout: builder.query<GetCheckoutData[], void>({
+      query: () => "/user-checkout/admin/checkouts",
+      providesTags: ["Checkout"],
+    }),
     login: builder.mutation<LoginResponse, LoginCredentials>({
       query: (credentials) => ({
         url: "/auth/admin/login",
@@ -110,6 +115,7 @@ export const {
   useAddProductDataMutation,
   useUpdateProductMutation,
   useDeleteProductMutation,
+  useGetCheckoutQuery,
   useLoginMutation,
   useLogoutMutation,
   useRefreshMutation,

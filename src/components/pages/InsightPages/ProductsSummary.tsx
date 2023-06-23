@@ -1,30 +1,30 @@
+import React, { useMemo } from "react";
 import {
   Box,
-  useColorMode,
   Center,
-  Link,
+  Heading,
   Image,
-  IconButton,
+  Link,
   Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalCloseButton,
   ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalOverlay,
+  useBreakpointValue,
+  useColorMode,
+  useColorModeValue,
 } from "@chakra-ui/react";
+import { ColDef } from "ag-grid-community";
+import { AgGridReact } from "ag-grid-react";
+import { useState, useEffect } from "react";
 import {
-  ProductFormValues,
-  ImageCellProps,
   DateParam,
-  ProdTable,
+  ImageCellProps,
+  ProductFormValues,
 } from "../../../interface/interface";
-import { FiEdit } from "react-icons/fi";
-import { DeleteIcon } from "@chakra-ui/icons";
+import { useGetProductDataQuery } from "../../../redux/apiSlice/apiSlice";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
-import { useMemo, useState } from "react";
-import { AgGridReact } from "ag-grid-react";
-import { ColDef } from "ag-grid-community";
-import { string } from "yup";
 
 const ImageCell: React.FC<ImageCellProps> = ({ value }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -66,72 +66,35 @@ const ImageCell: React.FC<ImageCellProps> = ({ value }) => {
   );
 };
 
-interface ProductsTableProps {
-  rowData: ProductFormValues[];
-  handleEdit: (product: ProductFormValues) => void;
-  handleDelete: (productId: string) => void;
-  isProductDeleteLoading: string;
-}
-
-const ProductsTable = ({
-  rowData,
-  handleEdit,
-  handleDelete,
-  isProductDeleteLoading,
-}: ProductsTableProps) => {
+const ProductsSummary = () => {
   const { colorMode } = useColorMode();
+  const isScreenFixed = useBreakpointValue({ base: false, md: true });
+  const headingColor = useColorModeValue("teal.400", "teal.500");
 
-  const handleEditClick = (product: ProductFormValues) => {
-    handleEdit(product);
-  };
+  const { data: productData } = useGetProductDataQuery();
 
-  const handleDeleteClick = (productId: string) => {
-    handleDelete(productId);
-  };
+  const [rowData, setRowData] = useState<ProductFormValues[]>([]);
+  useEffect(() => {
+    if (productData) {
+      setRowData(productData.productDetails);
+    }
+  }, [productData]);
 
   const [columnDefs] = useState([
     { field: "_id", headerName: "Product Id" },
-    { field: "image", headerName: "Product Image", cellRenderer: ImageCell },
-    { field: "name", headerName: "Product Name" },
+    { field: "name" },
+    { headerName: "Image", field: "image", cellRenderer: ImageCell },
+    { field: "description" },
+    { field: "discountedPrice", headerName: "Sell Price" },
+    { field: "originalPrice" },
+    { field: "gender" },
+    { field: "category" },
     {
       field: "recordDate",
       cellRenderer: function DateCellRenderer(params: DateParam) {
         const formattedDate = new Date(params.value).toLocaleString("en-IN");
         return <span>{formattedDate}</span>;
       },
-    },
-    {
-      headerName: "Actions",
-      field: "actions",
-      cellRendererFramework: (params: ProdTable) => (
-        <>
-          <IconButton
-            size="xs"
-            fontSize="1rem"
-            aria-label="edit"
-            icon={<FiEdit />}
-            onClick={() => handleEditClick(params.data)}
-            bgColor={"transparent"}
-            _hover={{
-              bgColor: "transparent",
-            }}
-          ></IconButton>
-          <IconButton
-            size="xs"
-            ml={4}
-            fontSize="1rem"
-            aria-label="delete"
-            icon={<DeleteIcon />}
-            color="red.500"
-            bgColor={"transparent"}
-            _hover={{
-              bgColor: "transparent",
-            }}
-            onClick={() => handleDeleteClick(params.data._id)}
-            isLoading={isProductDeleteLoading === params.data._id}
-          ></IconButton>
-        </>
-      ),
     },
   ]);
 
@@ -147,6 +110,21 @@ const ProductsTable = ({
 
   return (
     <>
+      <Box
+        marginX={4}
+        marginTop={isScreenFixed ? "5.5rem" : "0"}
+        mx="auto"
+        width={"90%"}
+      >
+        <Heading
+          mt={"2.5rem"}
+          textAlign="left"
+          colorScheme={"teal"}
+          color={headingColor}
+        >
+          Products Summary
+        </Heading>
+      </Box>
       <Center>
         <Box
           mt={5}
@@ -170,4 +148,4 @@ const ProductsTable = ({
   );
 };
 
-export default ProductsTable;
+export default ProductsSummary;

@@ -1,24 +1,32 @@
 import React from "react";
-import { Box, useBreakpointValue } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Heading,
+  useBreakpointValue,
+  useColorModeValue,
+} from "@chakra-ui/react";
+import OrderPage from "./orderPage/OrderPage";
 
 const OrderManagement = () => {
   const isScreenFixed = useBreakpointValue({ base: false, md: true });
+  const headingColor = useColorModeValue("teal.400", "teal.500");
   return (
     <>
-      <center>
-        <Box
-          width={10 / 12}
-          textAlign={"center"}
-          justifyContent={"center"}
-          display={"flex"}
-          fontWeight={500}
-          color={"teal.400"}
-          fontSize="3xl"
-          marginTop={isScreenFixed ? "5rem" : "1rem"}
-        >
-          <h1>Order Management page</h1>
-        </Box>
-      </center>
+      <Box marginX={4} marginTop={isScreenFixed ? "4.3rem" : "0"}>
+        <Center>
+          <Heading
+            my={2}
+            mt={"1.5rem"}
+            textAlign="center"
+            colorScheme={"teal"}
+            color={headingColor}
+          >
+            All Orders
+          </Heading>
+        </Center>
+        <OrderPage />
+      </Box>
     </>
   );
 };

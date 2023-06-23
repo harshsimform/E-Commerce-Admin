@@ -13,8 +13,11 @@ const LazyProductManagement = lazy(
 const LazyOrderManagement = lazy(
   () => import("./components/pages/OrderManagement")
 );
-const LazyUserManagement = lazy(
-  () => import("./components/pages/UserManagement")
+const LazyOrderDetails = lazy(
+  () => import("./components/pages/orderPage/OrderDetails")
+);
+const LazyNavbarManagement = lazy(
+  () => import("./components/pages/NavbarManagement")
 );
 
 const LazyLogin = lazy(() => import("./components/pages/authentication/Login"));
@@ -79,7 +82,7 @@ const mainRoutes = [
         ),
       },
       {
-        path: "/product-management",
+        path: "/products",
         element: (
           <Suspense fallback={<SuspenseLoading />}>
             <LazyProductManagement />
@@ -87,7 +90,7 @@ const mainRoutes = [
         ),
       },
       {
-        path: "/order-management",
+        path: "/orders",
         element: (
           <Suspense fallback={<SuspenseLoading />}>
             <LazyOrderManagement />
@@ -95,10 +98,18 @@ const mainRoutes = [
         ),
       },
       {
-        path: "/user-management",
+        path: "/order/:id",
         element: (
           <Suspense fallback={<SuspenseLoading />}>
-            <LazyUserManagement />
+            <LazyOrderDetails />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/nav-management",
+        element: (
+          <Suspense fallback={<SuspenseLoading />}>
+            <LazyNavbarManagement />
           </Suspense>
         ),
       },

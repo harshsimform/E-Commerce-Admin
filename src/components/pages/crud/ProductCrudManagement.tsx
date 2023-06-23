@@ -45,7 +45,7 @@ const ProductCrudManagement = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { data: productData } = useGetProductDataQuery();
+  const { data: productData, isLoading } = useGetProductDataQuery();
   const [updateProductMutation] = useUpdateProductMutation();
   const [deleteProductMutation] = useDeleteProductMutation();
 
@@ -66,7 +66,7 @@ const ProductCrudManagement = () => {
     onSubmitProps: FormikHelpers<ProductFormValues>
   ) => {
     onSubmitProps.resetForm();
-    console.log("click");
+    console.log("clickfds");
 
     setIsProductUpdateLoading(true);
     try {
@@ -132,10 +132,18 @@ const ProductCrudManagement = () => {
     setIsProductDeleteLoading("");
   };
 
+  if (isLoading) {
+    return (
+      <Center>
+        <Text fontSize="xl">Loading...</Text>
+      </Center>
+    );
+  }
+
   return (
     <>
-      <Box maxWidth="1000px" mx="auto" my="5">
-        {rowData.length === 0 ? (
+      <Box width="90%" mx="auto" my="5">
+        {productData?.productDetails.length === 0 ? (
           <Center>
             <Text fontSize="xl">No products found.</Text>
           </Center>

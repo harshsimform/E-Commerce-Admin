@@ -82,3 +82,59 @@ export interface RefreshResponse {
 export interface RefreshCredentials {
   refreshToken: string;
 }
+
+export interface CartProduct {
+  _id?: string;
+  productId: string;
+  quantity: number;
+  discountedPrice: number;
+  price: number;
+  name: string;
+  image: string;
+}
+
+export interface cardDetails {
+  cardName: string;
+  cardNumber: string;
+  expirationDate: string;
+  cvv: string;
+}
+
+export interface GetCheckoutData {
+  _id?: string;
+  userId?: string;
+  recordDate: string;
+  cartItems: CartProduct[];
+  summary: {
+    totalMrp: number;
+    taxCharge: number;
+    shippingCharge: number;
+    totalAmount: number;
+  }[];
+  address: {
+    firstName: string;
+    lastName: string;
+    address: string;
+    city: string;
+    country: string;
+    state: string;
+    postalCode: string;
+    email: string;
+    phone: string;
+  }[];
+  payment?: cardDetails[];
+}
+
+export interface DateParam {
+  value: string;
+}
+
+export interface ProdTable {
+  data: ProductFormValues;
+}
+
+export interface OrderSummaryState {
+  totalRevenue: number;
+  totalCustomers: number;
+  totalOrders: number;
+}

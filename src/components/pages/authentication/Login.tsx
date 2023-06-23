@@ -42,37 +42,39 @@ const Login = () => {
 
   const [loginUser] = useLoginMutation();
 
-  const onSubmit = async (values: UserAuthFormValues) => {
-    try {
-      const response = await loginUser({
-        email: values.email,
-        password: values.password,
-      }).unwrap();
-      navigate("/");
-      dispatch(setLoggedIn(response.accessToken));
-      toast({
-        title: "You have successfully logged in",
-        position: "top",
-        status: "success",
-        isClosable: true,
+  const onSubmit = (values: UserAuthFormValues) => {
+    loginUser({
+      email: values.email,
+      password: values.password,
+    })
+      .unwrap()
+      .then((response: any) => {
+        toast({
+          title: response?.message,
+          position: "top",
+          status: "success",
+          isClosable: true,
+        });
+        navigate("/");
+        dispatch(setLoggedIn(response.accessToken));
+      })
+      .catch((error) => {
+        if (error.data.message) {
+          toast({
+            title: error.data.message,
+            position: "top",
+            status: "error",
+            isClosable: true,
+          });
+        } else {
+          toast({
+            title: "Oops, please try again!",
+            position: "top",
+            status: "error",
+            isClosable: true,
+          });
+        }
       });
-    } catch (err: any) {
-      if (err.data.message) {
-        toast({
-          title: err.data.message,
-          position: "top",
-          status: "error",
-          isClosable: true,
-        });
-      } else {
-        toast({
-          title: "oops, please try again!",
-          position: "top",
-          status: "error",
-          isClosable: true,
-        });
-      }
-    }
   };
 
   return (

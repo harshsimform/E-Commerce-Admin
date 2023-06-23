@@ -29,6 +29,7 @@ import {
   setLoggedOut,
 } from "../../redux/authSlice/authSlice";
 import { api, useLogoutMutation } from "../../redux/apiSlice/apiSlice";
+import { resetOrderSummary } from "../../redux/orderSummarySlice/orderSummarySlice";
 
 const Navbar = () => {
   const { isOpen, onToggle } = useDisclosure();
@@ -43,6 +44,7 @@ const Navbar = () => {
     try {
       await logoutUser();
       dispatch(setLoggedOut());
+      dispatch(resetOrderSummary());
       store.dispatch(api.util.resetApiState());
       navigate("/login");
     } catch (error) {

@@ -2,20 +2,23 @@ import { Box, Spinner } from "@chakra-ui/react";
 
 const SuspenseLoading = () => {
   return (
-    <Box height="100vh" width="100vw" position="relative">
+    <Box
+      height="100vh"
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+    >
       <Box
-        position="absolute"
-        top="50%"
-        left="50%"
-        transform="translate(-50%, -50%)"
+        justifyContent="center"
+        display="flex"
+        alignItems="center"
+        boxSize={8}
+        borderRadius="50%"
+        borderWidth="1px"
+        bgColor="transparent"
+        boxShadow="base"
       >
-        <Spinner
-          thickness="4px"
-          speed="0.65s"
-          emptyColor="gray.200"
-          color="teal.500"
-          size="lg"
-        />
+        <Spinner thickness="2px" speed="0.65s" color="teal.500" size="md" />
       </Box>
     </Box>
   );

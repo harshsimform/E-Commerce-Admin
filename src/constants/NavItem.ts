@@ -11,14 +11,14 @@ export const NAV_ITEMS: Array<NavItem> = [
   },
   {
     label: "PRODUCTS",
-    to: "/product-management",
+    to: "/products",
   },
   {
     label: "ORDERS",
-    to: "/order-management",
+    to: "/orders",
   },
   {
-    label: "USERS",
-    to: "/user-management",
+    label: "NAVBAR",
+    to: "/nav-management",
   },
 ];
